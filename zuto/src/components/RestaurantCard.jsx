@@ -5,11 +5,12 @@ export default function RestaurantCard({ restaurant }) {
   const navigate = useNavigate()
   const { favourites, toggleFavourite } = useApp()
   const isFav = favourites.includes(restaurant.id)
+  const promo = restaurant.promotion
 
   return (
     <div className="restaurant-card">
       <div
-        className="thumb"
+        className={`thumb ${promo ? `promo-ring tier-${promo.tier}` : ''}`}
         style={{ backgroundImage: `url(${restaurant.banner})` }}
       >
         <span className={`status-pill ${restaurant.isOpen ? 'open' : 'closed'}`}>
@@ -25,6 +26,7 @@ export default function RestaurantCard({ restaurant }) {
         >
           {isFav ? '♥' : '♡'}
         </button>
+        {promo && <span className="promo-chip">{promo.label}</span>}
       </div>
       <div className="info">
         <div className="info-top">

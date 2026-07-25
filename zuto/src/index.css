@@ -1667,3 +1667,253 @@ input:focus-visible {
   color: var(--stone);
   text-align: center;
 }
+/* ============================================
+   Promotion tiers: shine rings + badges
+   ============================================ */
+
+.tier-bronze {
+  --tier-color: #b06b34;
+  --tier-glow: rgba(176, 107, 52, 0.45);
+}
+.tier-silver {
+  --tier-color: #9a9a9a;
+  --tier-glow: rgba(154, 154, 154, 0.45);
+}
+.tier-gold {
+  --tier-color: #c9a227;
+  --tier-glow: rgba(201, 162, 39, 0.5);
+}
+
+.promo-ring {
+  position: relative;
+}
+
+.promo-ring::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 3px solid var(--tier-color);
+  box-shadow: 0 0 14px var(--tier-glow);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.promo-chip {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  color: white;
+  background: var(--tier-color);
+  z-index: 3;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Promoted section on dashboard — dark themed */
+
+.promoted-section {
+  background: var(--ink);
+  border-radius: var(--radius-lg);
+  padding: 18px 0 18px 20px;
+  margin: 0 -20px;
+}
+
+.promoted-section .section-title {
+  margin: 0 20px 12px 0;
+}
+
+.promoted-section .section-title h2,
+.promoted-section .section-title .see-all {
+  color: var(--paper);
+}
+
+.promoted-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-right: 20px;
+  scrollbar-width: none;
+}
+
+.promoted-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.promoted-card {
+  flex: 0 0 auto;
+  width: 190px;
+  background: var(--ink-soft);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.promoted-card .thumb-wrap {
+  position: relative;
+  margin: 10px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.promoted-card img {
+  width: 100%;
+  height: 96px;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius-sm);
+}
+
+.promoted-card .info {
+  padding: 0 12px 14px;
+}
+
+.promoted-card .name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--paper);
+}
+
+.promoted-card .meta {
+  font-size: 11px;
+  color: rgba(250, 250, 248, 0.55);
+  margin-top: 3px;
+}
+
+/* Vendor "Promote" tab */
+
+.promo-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.promo-p-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 20px;
+  flex: 0 0 auto;
+}
+
+.promo-tier-card {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-top: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-tier-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--tier-color);
+}
+
+.promo-tier-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.promo-tier-name {
+  font-family: var(--serif);
+  font-size: 19px;
+}
+
+.promo-tier-price {
+  text-align: right;
+}
+
+.promo-tier-price .amount {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.promo-tier-price .period {
+  font-size: 11px;
+  color: var(--stone);
+}
+
+.promo-benefits {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.promo-benefit-row {
+  font-size: 13px;
+  color: var(--ink-soft);
+  display: flex;
+  gap: 8px;
+}
+
+.promo-benefit-row .check {
+  color: var(--tier-color);
+  font-weight: 700;
+}
+
+/* Payment method selector (shared: pre-order + promotion checkout) */
+
+.pay-method-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.pay-method-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  padding: 13px 14px;
+  cursor: pointer;
+}
+
+.pay-method-option.selected {
+  border-color: var(--ink);
+  background: var(--paper-dim);
+}
+
+.pay-method-option .icon {
+  font-size: 18px;
+}
+
+.pay-method-option .label {
+  font-size: 14px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.pay-method-option .radio-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--hairline);
+  flex: 0 0 auto;
+}
+
+.pay-method-option.selected .radio-dot {
+  border-color: var(--ink);
+  background: var(--ink);
+  box-shadow: inset 0 0 0 3px white;
+}

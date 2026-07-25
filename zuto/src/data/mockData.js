@@ -25,6 +25,7 @@ export const restaurants = [
     distance: '0.4 km',
     avgCost: 300,
     isOpen: true,
+    promotion: null,
     banner: 'https://picsum.photos/seed/brewcorner/1200/700',
     gallery: [
       'https://picsum.photos/seed/brew1/600/600',
@@ -51,6 +52,7 @@ export const restaurants = [
     distance: '0.7 km',
     avgCost: 150,
     isOpen: true,
+    promotion: { tier: 'gold', label: 'Promoted · Yearly' },
     banner: 'https://picsum.photos/seed/streetflame/1200/700',
     gallery: [
       'https://picsum.photos/seed/sf1/600/600',
@@ -76,6 +78,7 @@ export const restaurants = [
     distance: '1.1 km',
     avgCost: 120,
     isOpen: false,
+    promotion: null,
     banner: 'https://picsum.photos/seed/tiffin/1200/700',
     gallery: [
       'https://picsum.photos/seed/ti1/600/600',
@@ -101,6 +104,7 @@ export const restaurants = [
     distance: '1.4 km',
     avgCost: 200,
     isOpen: true,
+    promotion: { tier: 'bronze', label: 'Promoted · Today' },
     banner: 'https://picsum.photos/seed/sweettheory/1200/700',
     gallery: [
       'https://picsum.photos/seed/st1/600/600',
@@ -117,13 +121,7 @@ export const restaurants = [
       { id: 'm3', name: 'Cold Brew', price: 130 },
     ],
   },
-]
-
-export const coupons = [
-  { id: 'c1', title: 'Student Discount', detail: '10% off with valid college ID', code: 'STUDENT10' },
-  { id: 'c2', title: 'First Order', detail: '10% off your first ZUTO order', code: 'WELCOME10' },
-  { id: 'c3', title: 'Review Reward', detail: 'Free dessert after your first review', code: 'REVIEWSWEET' },
- {
+  {
     id: 'crust-lab',
     name: 'Crust Lab',
     cuisine: 'Pizza · Italian',
@@ -132,6 +130,7 @@ export const coupons = [
     distance: '0.9 km',
     avgCost: 250,
     isOpen: true,
+    promotion: null,
     banner: 'https://picsum.photos/seed/crustlab/1200/700',
     gallery: [
       'https://picsum.photos/seed/cl1/600/600',
@@ -157,6 +156,7 @@ export const coupons = [
     distance: '1.2 km',
     avgCost: 220,
     isOpen: true,
+    promotion: null,
     banner: 'https://picsum.photos/seed/grillhouse/1200/700',
     gallery: [
       'https://picsum.photos/seed/gh1/600/600',
@@ -182,6 +182,7 @@ export const coupons = [
     distance: '0.5 km',
     avgCost: 100,
     isOpen: true,
+    promotion: null,
     banner: 'https://picsum.photos/seed/juicejunction/1200/700',
     gallery: [
       'https://picsum.photos/seed/jj1/600/600',
@@ -207,6 +208,7 @@ export const coupons = [
     distance: '1.6 km',
     avgCost: 150,
     isOpen: true,
+    promotion: null,
     banner: 'https://picsum.photos/seed/flourpower/1200/700',
     gallery: [
       'https://picsum.photos/seed/fp1/600/600',
@@ -223,4 +225,10 @@ export const coupons = [
       { id: 'm3', name: 'Cinnamon Roll', price: 90 },
     ],
   },
+]
+
+export const coupons = [
+  { id: 'c1', title: 'Student Discount', detail: '10% off with valid college ID', code: 'STUDENT10' },
+  { id: 'c2', title: 'First Order', detail: '10% off your first ZUTO order', code: 'WELCOME10' },
+  { id: 'c3', title: 'Review Reward', detail: 'Free dessert after your first review', code: 'REVIEWSWEET' },
 ]

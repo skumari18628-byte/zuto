@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { restaurants } from '../data/mockData.js'
 import { useApp } from '../context/useApp.js'
 
-const tabs = ['Overview', 'Menu', 'Orders', 'Offers']
+const tabs = ['Overview', 'Menu', 'Orders', 'Offers', 'Promote']
 
 const revenueByDay = [
   { day: 'M', amount: 1800 },
@@ -20,6 +20,53 @@ const preOrders = [
   { id: 2, customer: 'Sneha R.', time: '1:30 PM', items: 'Cold Coffee x1, Croissant x2', total: 240, status: 'confirmed' },
 ]
 
+const promoTiers = [
+  {
+    id: 'day',
+    tier: 'bronze',
+    name: 'Daily',
+    price: 50,
+    period: '/ day',
+    benefits: [
+      'Bronze shine ring on your listing',
+      'Featured in "Promoted near you"',
+      'Runs for 24 hours',
+    ],
+  },
+  {
+    id: 'month',
+    tier: 'silver',
+    name: 'Monthly',
+    price: 700,
+    period: '/ month',
+    benefits: [
+      'Silver shine ring on your listing',
+      'Featured in "Promoted near you"',
+      'Priority placement in search results',
+      'Runs for 30 days',
+    ],
+  },
+  {
+    id: 'year',
+    tier: 'gold',
+    name: 'Yearly',
+    price: 8400,
+    period: '/ year',
+    benefits: [
+      'Gold shine ring on your listing',
+      'Featured in "Promoted near you"',
+      'Top priority placement in search results',
+      'Dedicated homepage banner slot',
+      'Runs for 365 days',
+    ],
+  },
+]
+
+const promoPayMethods = [
+  { id: 'card', icon: '💳', label: 'Card' },
+  { id: 'upi', icon: '📲', label: 'UPI' },
+]
+
 export default function VendorDashboard() {
   const navigate = useNavigate()
   const { user, logout } = useApp()
@@ -34,6 +81,10 @@ export default function VendorDashboard() {
   const [offerName, setOfferName] = useState('')
   const [offerPercent, setOfferPercent] = useState('')
 
+  const [selectedTier, setSelectedTier] = useState(null)
+  const [promoPayMethod, setPromoPayMethod] = useState('card')
+  const [activePromo, setActivePromo] = useState(null)
+
   const handleCreateOffer = (e) => {
     e.preventDefault()
     setOffers((prev) => [
@@ -43,6 +94,11 @@ export default function VendorDashboard() {
     setOfferName('')
     setOfferPercent('')
     setOfferFormOpen(false)
+  }
+
+  const handleConfirmPromo = () => {
+    setActivePromo(selectedTier)
+    setSelectedTier(null)
   }
 
   const handleLogout = () => {
@@ -88,7 +144,7 @@ export default function VendorDashboard() {
           </div>
         </div>
 
-        <div className="tab-row" style={{ marginTop: 22 }}>
+        <div className="tab-row" style={{ marginTop: 22, flexWrap: 'wrap' }}>
           {tabs.map((t) => (
             <button
               key={t}
@@ -255,6 +311,90 @@ export default function VendorDashboard() {
                 <span className="pill-tag" style={{ color: 'var(--good)' }}>● Live</span>
               </div>
             ))}
+          </>
+        )}
+
+        {tab === 'Promote' && (
+          <>
+            <div className="promo-header">
+              <div className="promo-p-logo">P</div>
+              <div>
+                <h2 style={{ fontSize: 19 }}>Promote your restaurant</h2>
+                <p style={{ fontSize: 12.5, marginTop: 2 }}>Get seen first by hungry customers nearby.</p>
+              </div>
+            </div>
+
+            {activePromo && !selectedTier && (
+              <div className="card" style={{ marginTop: 16, background: 'var(--paper-dim)' }}>
+                <p style={{ fontSize: 13.5, color: 'var(--ink)', fontWeight: 600 }}>
+                  ✓ Your {promoTiers.find((t) => t.id === activePromo)?.name.toLowerCase()} promotion is live.
+                </p>
+              </div>
+            )}
+
+            {!selectedTier ? (
+              promoTiers.map((t) => (
+                <div
+                  className={`promo-tier-card tier-${t.tier}`}
+                  key={t.id}
+                  style={{ '--tier-color': `var(--tier-color)` }}
+                >
+                  <div className="promo-tier-top">
+                    <div>
+                      <div className="promo-tier-name">{t.name}</div>
+                    </div>
+                    <div className="promo-tier-price">
+                      <div className="amount">₹{t.price}</div>
+                      <div className="period">{t.period}</div>
+                    </div>
+                  </div>
+                  <div className="promo-benefits">
+                    {t.benefits.map((b, i) => (
+                      <div className="promo-benefit-row" key={i}>
+                        <span className="check">✓</span>
+                        <span>{b}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    className="btn btn-primary"
+                    style={{ marginTop: 16 }}
+                    onClick={() => setSelectedTier(t.id)}
+                  >
+                    Choose {t.name.toLowerCase()} plan
+                  </button>
+                </div>
+              ))
+            ) : (
+              <div className="card" style={{ marginTop: 16 }}>
+                <h3 style={{ fontSize: 16, marginBottom: 4 }}>Choose payment method</h3>
+                <p style={{ fontSize: 12.5 }}>
+                  Paying ₹{promoTiers.find((t) => t.id === selectedTier)?.price} for the{' '}
+                  {promoTiers.find((t) => t.id === selectedTier)?.name.toLowerCase()} plan.
+                </p>
+                <div className="pay-method-row">
+                  {promoPayMethods.map((m) => (
+                    <div
+                      key={m.id}
+                      className={`pay-method-option ${promoPayMethod === m.id ? 'selected' : ''}`}
+                      onClick={() => setPromoPayMethod(m.id)}
+                    >
+                      <span className="icon">{m.icon}</span>
+                      <span className="label">{m.label}</span>
+                      <span className="radio-dot" />
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+                  <button className="btn btn-primary" onClick={handleConfirmPromo}>
+                    Confirm payment
+                  </button>
+                  <button className="btn btn-secondary" onClick={() => setSelectedTier(null)}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>

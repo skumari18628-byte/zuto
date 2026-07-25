@@ -3,6 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { restaurants } from '../data/mockData.js'
 import { useApp } from '../context/useApp.js'
 
+const payMethods = [
+  { id: 'card', icon: '💳', label: 'Card' },
+  { id: 'upi', icon: '📲', label: 'UPI' },
+  { id: 'cod', icon: '💵', label: 'Cash on Delivery' },
+]
+
 export default function RestaurantDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -14,6 +20,9 @@ export default function RestaurantDetails() {
   const [time, setTime] = useState('')
   const [guests, setGuests] = useState(2)
   const [confirmed, setConfirmed] = useState(null)
+
+  const [payOpen, setPayOpen] = useState(false)
+  const [payMethod, setPayMethod] = useState('card')
 
   if (!restaurant) {
     return (
@@ -43,13 +52,15 @@ export default function RestaurantDetails() {
     setReserveOpen(false)
   }
 
-  const handlePreOrder = () => {
+  const handleConfirmPreOrder = () => {
     addOrder({
       restaurant: restaurant.name,
       items: restaurant.menu.slice(0, 2).map((m) => m.name),
+      payMethod,
       id: Date.now(),
     })
     setConfirmed('order')
+    setPayOpen(false)
   }
 
   return (
@@ -170,6 +181,34 @@ export default function RestaurantDetails() {
             </form>
           )}
 
+          {payOpen && (
+            <div className="card" style={{ marginTop: 20 }}>
+              <h3 style={{ fontSize: 17, marginBottom: 4 }}>Choose payment method</h3>
+              <p style={{ fontSize: 12.5 }}>How would you like to pay for your pre-order?</p>
+              <div className="pay-method-row">
+                {payMethods.map((m) => (
+                  <div
+                    key={m.id}
+                    className={`pay-method-option ${payMethod === m.id ? 'selected' : ''}`}
+                    onClick={() => setPayMethod(m.id)}
+                  >
+                    <span className="icon">{m.icon}</span>
+                    <span className="label">{m.label}</span>
+                    <span className="radio-dot" />
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+                <button className="btn btn-primary" onClick={handleConfirmPreOrder}>
+                  Confirm pre-order
+                </button>
+                <button className="btn btn-secondary" onClick={() => setPayOpen(false)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
           {confirmed && (
             <div className="card" style={{ marginTop: 20, textAlign: 'center' }}>
               <p style={{ color: 'var(--ink)', fontWeight: 600 }}>
@@ -186,7 +225,7 @@ export default function RestaurantDetails() {
         <button className="btn btn-secondary" onClick={() => setReserveOpen((v) => !v)}>
           Reserve seat
         </button>
-        <button className="btn btn-primary" onClick={handlePreOrder}>
+        <button className="btn btn-primary" onClick={() => setPayOpen(true)}>
           Pre-order
         </button>
       </div>

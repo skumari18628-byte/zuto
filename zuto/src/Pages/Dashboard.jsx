@@ -169,6 +169,32 @@ export default function Dashboard() {
         <div className="section-title" style={{ marginTop: 24 }}>
           <h2>Categories</h2>
         </div>
+        {restaurants.some((r) => r.promotion) && (
+          <div className="promoted-section" style={{ marginTop: 24 }}>
+            <div className="section-title">
+              <h2>Promoted near you</h2>
+            </div>
+            <div className="promoted-scroll">
+              {restaurants
+                .filter((r) => r.promotion)
+                .map((r) => (
+                  <div
+                    className="promoted-card"
+                    key={r.id}
+                    onClick={() => navigate(`/restaurant/${r.id}`)}
+                  >
+                    <div className={`thumb-wrap promo-ring tier-${r.promotion.tier}`}>
+                      <img src={r.banner} alt={r.name} />
+                    </div>
+                    <div className="info">
+                      <div className="name">{r.name}</div>
+                      <div className="meta">{r.cuisine}</div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
         <div className="cat-icon-row">
           {categories.map((cat) => (
             <div
