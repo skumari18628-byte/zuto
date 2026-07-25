@@ -1,29 +1,36 @@
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo.jsx'
+import { useApp } from '../context/useApp.js'
 
 export default function Splash() {
   const navigate = useNavigate()
+  const { user, role } = useApp()
+  const [exiting, setExiting] = useState(false)
+
+  useEffect(() => {
+    const exitTimer = setTimeout(() => setExiting(true), 1800)
+    const navTimer = setTimeout(() => {
+      if (user) {
+        navigate(role === 'vendor' ? '/vendor' : '/dashboard')
+      } else {
+        navigate('/login')
+      }
+    }, 2200)
+    return () => {
+      clearTimeout(exitTimer)
+      clearTimeout(navTimer)
+    }
+  }, [navigate, user, role])
 
   return (
     <div className="page">
       <div className="center-col">
-        <Logo animated />
-        <div style={{ height: 22 }} />
-        <div className="zuto-wordmark">ZUTO</div>
-        <p style={{ marginTop: 10, maxWidth: 260 }}>
-          Hidden gems near you — the small places worth walking for.
-        </p>
-        <div style={{ height: 40 }} />
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <button className="btn btn-primary" onClick={() => navigate('/login')}>
-            Get Started
-          </button>
-          <button
-            className="btn btn-ghost"
-            onClick={() => navigate('/login', { state: { role: 'vendor' } })}
-          >
-            I'm a vendor
-          </button>
+        <div className={`splash-content ${exiting ? 'exit' : ''}`}>
+          <div className="splash-loader-wrap">
+            <div className="splash-loader-ring" />
+            <Logo />
+          </div>
         </div>
       </div>
     </div>
