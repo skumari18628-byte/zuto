@@ -1483,3 +1483,55 @@ input:focus-visible {
   background: var(--paper-dim);
   color: var(--bad);
 }
+/* ============================================
+   Splash: loading ring + pop-fade exit
+   ============================================ */
+
+.splash-loader-wrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+}
+
+.splash-loader-ring {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  border: 3px solid var(--hairline);
+  border-top-color: var(--ink);
+  animation: splash-spin 0.9s linear infinite;
+}
+
+@keyframes splash-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.splash-content.exit {
+  opacity: 0;
+  transform: scale(1.08);
+}
+
+/* ============================================
+   Category results page
+   ============================================ */
+
+.topbar-back {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline);
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}

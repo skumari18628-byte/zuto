@@ -15,6 +15,11 @@ export default function Register() {
     navigate('/dashboard')
   }
 
+  const handleSocialSignup = (provider) => {
+    login({ name: name || `${provider} User`, contact: email || `${provider.toLowerCase()}@zuto.app` }, 'customer')
+    navigate('/dashboard')
+  }
+
   return (
     <div className="page">
       <div className="page-body" style={{ paddingTop: 60 }}>
@@ -61,8 +66,12 @@ export default function Register() {
         <div className="divider-row">or continue with</div>
 
         <div style={{ display: 'flex', gap: 10 }}>
-          <button className="btn btn-secondary">🔍 Google</button>
-          <button className="btn btn-secondary"> Apple</button>
+          <button className="btn btn-secondary" onClick={() => handleSocialSignup('Google')}>
+            🔍 Google
+          </button>
+          <button className="btn btn-secondary" onClick={() => handleSocialSignup('Apple')}>
+            Apple
+          </button>
         </div>
 
         <p style={{ textAlign: 'center', marginTop: 26, fontSize: 13.5 }}>

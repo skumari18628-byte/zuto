@@ -16,18 +16,16 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const { user } = useApp()
   const [query, setQuery] = useState('')
-  const [activeCategory, setActiveCategory] = useState(null)
 
   const filtered = useMemo(() => {
     return restaurants.filter((r) => {
-      const matchesQuery =
+      return (
         !query ||
         r.name.toLowerCase().includes(query.toLowerCase()) ||
         r.cuisine.toLowerCase().includes(query.toLowerCase())
-      const matchesCategory = !activeCategory || r.category === activeCategory
-      return matchesQuery && matchesCategory
+      )
     })
-  }, [query, activeCategory])
+  }, [query])
 
   const featured = restaurants.slice(0, 2)
   const firstName = (user?.name || 'Guest').split(' ')[0]
@@ -78,18 +76,12 @@ export default function Dashboard() {
           <h2>Categories</h2>
         </div>
         <div className="cat-icon-row">
-          <div
-            className={`cat-icon-item ${!activeCategory ? 'active' : ''}`}
-            onClick={() => setActiveCategory(null)}
-          >
-            <div className="cat-icon-circle">✦</div>
-            <div className="cat-icon-label">All</div>
-          </div>
           {categories.map((cat) => (
             <div
               key={cat.id}
-              className={`cat-icon-item ${activeCategory === cat.id ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat.id)}
+              className="cat-icon-item"
+              onClick={() => navigate(`/category/${cat.id}`)}
+              style={{ cursor: 'pointer' }}
             >
               <div className="cat-icon-circle">{cat.emoji}</div>
               <div className="cat-icon-label">{cat.label}</div>
@@ -142,7 +134,7 @@ export default function Dashboard() {
         </div>
         {filtered.length === 0 ? (
           <div className="empty-state">
-            <p>No hidden gems matched that search. Try another category.</p>
+            <p>No hidden gems matched that search.</p>
           </div>
         ) : (
           <div className="restaurant-list">

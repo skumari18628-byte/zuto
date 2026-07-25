@@ -17,6 +17,11 @@ export default function Login() {
     navigate(role === 'vendor' ? '/vendor' : '/dashboard')
   }
 
+  const handleSocialLogin = (provider) => {
+    login({ name: `${provider} User`, contact: `${provider.toLowerCase()}@zuto.app` }, role)
+    navigate(role === 'vendor' ? '/vendor' : '/dashboard')
+  }
+
   return (
     <div className="page">
       <div className="page-body" style={{ paddingTop: 60 }}>
@@ -69,8 +74,12 @@ export default function Login() {
         <div className="divider-row">or continue with</div>
 
         <div style={{ display: 'flex', gap: 10 }}>
-          <button className="btn btn-secondary">🔍 Google</button>
-          <button className="btn btn-secondary"> Apple</button>
+          <button className="btn btn-secondary" onClick={() => handleSocialLogin('Google')}>
+            🔍 Google
+          </button>
+          <button className="btn btn-secondary" onClick={() => handleSocialLogin('Apple')}>
+            Apple
+          </button>
         </div>
 
         <p style={{ textAlign: 'center', marginTop: 26, fontSize: 13.5 }}>
