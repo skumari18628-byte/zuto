@@ -114,7 +114,7 @@ export default function Profile() {
           <span className="list-label">Rate the app</span>
           <span className="chevron">→</span>
         </div>
-        <div className="list-item" onClick={() => navigate('/vendor')}>
+        <div className="list-item" onClick={() => navigate('/vendor-loading')}>
           <span className="list-icon">🏪</span>
           <span className="list-label">Switch to vendor dashboard</span>
           <span className="chevron">→</span>

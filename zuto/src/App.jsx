@@ -8,6 +8,7 @@ import RestaurantDetails from './Pages/RestaurantDetails.jsx'
 import Rewards from './Pages/Rewards.jsx'
 import Profile from './Pages/Profile.jsx'
 import VendorDashboard from './Pages/VendorDashboard.jsx'
+import VendorSwitchLoading from './Pages/VendorSwitchLoading.jsx'
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
       <Route path="/rewards" element={<Rewards />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/vendor" element={<VendorDashboard />} />
+      <Route path="/vendor-loading" element={<VendorSwitchLoading />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

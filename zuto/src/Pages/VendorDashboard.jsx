@@ -27,6 +27,24 @@ export default function VendorDashboard() {
   const restaurant = restaurants[0]
   const maxRevenue = Math.max(...revenueByDay.map((d) => d.amount))
 
+  const [offers, setOffers] = useState([
+    { id: 1, title: 'Happy Hour Special', detail: '20% off, 3–5 PM daily' },
+  ])
+  const [offerFormOpen, setOfferFormOpen] = useState(false)
+  const [offerName, setOfferName] = useState('')
+  const [offerPercent, setOfferPercent] = useState('')
+
+  const handleCreateOffer = (e) => {
+    e.preventDefault()
+    setOffers((prev) => [
+      { id: Date.now(), title: offerName, detail: `${offerPercent}% off` },
+      ...prev,
+    ])
+    setOfferName('')
+    setOfferPercent('')
+    setOfferFormOpen(false)
+  }
+
   const handleLogout = () => {
     logout()
     navigate('/login')
@@ -177,18 +195,66 @@ export default function VendorDashboard() {
             <div className="section-title">
               <h2 style={{ fontSize: 19 }}>Active offers</h2>
             </div>
-            <div className="card" style={{ marginBottom: 16 }}>
-              <h3 style={{ fontSize: 16, marginBottom: 6 }}>Create promotional offer</h3>
-              <p style={{ fontSize: 13, marginBottom: 14 }}>Boost sales with a limited-time offer for your customers.</p>
-              <button className="btn btn-primary">+ Create new offer</button>
-            </div>
-            <div className="coupon-card">
-              <div>
-                <div style={{ fontWeight: 700, fontSize: 14.5 }}>Happy Hour Special</div>
-                <div style={{ fontSize: 12.5, color: 'var(--stone)' }}>20% off, 3–5 PM daily</div>
+
+            {!offerFormOpen ? (
+              <div className="card" style={{ marginBottom: 16 }}>
+                <h3 style={{ fontSize: 16, marginBottom: 6 }}>Create promotional offer</h3>
+                <p style={{ fontSize: 13, marginBottom: 14 }}>
+                  Boost sales with a limited-time offer for your customers.
+                </p>
+                <button className="btn btn-primary" onClick={() => setOfferFormOpen(true)}>
+                  + Create new offer
+                </button>
               </div>
-              <span className="pill-tag" style={{ color: 'var(--good)' }}>● Live</span>
-            </div>
+            ) : (
+              <form className="card" style={{ marginBottom: 16 }} onSubmit={handleCreateOffer}>
+                <h3 style={{ fontSize: 16, marginBottom: 14 }}>New offer</h3>
+                <div className="field">
+                  <label>Offer name</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Weekend Special"
+                    value={offerName}
+                    onChange={(e) => setOfferName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="field">
+                  <label>Discount percentage</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="100"
+                    placeholder="e.g. 20"
+                    value={offerPercent}
+                    onChange={(e) => setOfferPercent(e.target.value)}
+                    required
+                  />
+                </div>
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <button type="submit" className="btn btn-primary">
+                    Submit
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setOfferFormOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {offers.map((o) => (
+              <div className="coupon-card" key={o.id}>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 14.5 }}>{o.title}</div>
+                  <div style={{ fontSize: 12.5, color: 'var(--stone)' }}>{o.detail}</div>
+                </div>
+                <span className="pill-tag" style={{ color: 'var(--good)' }}>● Live</span>
+              </div>
+            ))}
           </>
         )}
       </div>
