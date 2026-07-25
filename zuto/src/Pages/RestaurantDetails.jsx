@@ -60,7 +60,7 @@ export default function RestaurantDetails() {
         </button>
       </div>
 
-      <div className="page-body" style={{ paddingTop: 18 }}>
+      <div className="detail-overlay-card">
         <div className="info-top">
           <div>
             <h1 style={{ fontSize: 26 }}>{restaurant.name}</h1>
@@ -80,98 +80,106 @@ export default function RestaurantDetails() {
           <span>·</span>
           <span>₹{restaurant.avgCost} for two</span>
           <span
-            className={`pill-tag`}
+            className="pill-tag"
             style={{ color: restaurant.isOpen ? 'var(--good)' : 'var(--bad)' }}
           >
             {restaurant.isOpen ? 'Open now' : 'Closed'}
           </span>
         </div>
 
-        <p style={{ marginTop: 16 }}>{restaurant.description}</p>
-
-        <div className="gallery-row">
-          {restaurant.gallery.map((src, i) => (
-            <img key={i} src={src} alt={`${restaurant.name} gallery ${i + 1}`} />
-          ))}
+        <div>
+          <span className="tag-pill">Student Friendly</span>
+          <span className="tag-pill">Seating Available</span>
+          <span className="tag-pill">₹{Math.round(restaurant.avgCost / 2)}–{restaurant.avgCost}</span>
         </div>
 
-        <div className="tab-row">
-          <button
-            className={`tab-btn ${tab === 'menu' ? 'active' : ''}`}
-            onClick={() => setTab('menu')}
-          >
-            Menu
-          </button>
-          <button
-            className={`tab-btn ${tab === 'info' ? 'active' : ''}`}
-            onClick={() => setTab('info')}
-          >
-            Details
-          </button>
-        </div>
+        <div className="page-body" style={{ padding: '0 0 100px' }}>
+          <p style={{ marginTop: 16 }}>{restaurant.description}</p>
 
-        {tab === 'menu' ? (
-          <div style={{ marginTop: 8 }}>
-            {restaurant.menu.map((item) => (
-              <div className="menu-item" key={item.id}>
-                <span className="name">{item.name}</span>
-                <span className="price">₹{item.price}</span>
-              </div>
+          <div className="gallery-row">
+            {restaurant.gallery.map((src, i) => (
+              <img key={i} src={src} alt={`${restaurant.name} gallery ${i + 1}`} />
             ))}
           </div>
-        ) : (
-          <div className="info-list">
-            <div className="row">
-              <span className="label">Hours</span>
-              <span>{restaurant.hours}</span>
-            </div>
-            <div className="row">
-              <span className="label">Contact</span>
-              <span>{restaurant.contact}</span>
-            </div>
-            <div className="row">
-              <span className="label">Distance</span>
-              <span>{restaurant.distance}</span>
-            </div>
-          </div>
-        )}
 
-        {reserveOpen && (
-          <form className="card" style={{ marginTop: 20 }} onSubmit={handleReserve}>
-            <h3 style={{ fontSize: 17, marginBottom: 14 }}>Reserve a seat</h3>
-            <div className="field">
-              <label>Date</label>
-              <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-            </div>
-            <div className="field">
-              <label>Time</label>
-              <input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
-            </div>
-            <div className="field">
-              <label>Number of people</label>
-              <input
-                type="number"
-                min="1"
-                max="12"
-                value={guests}
-                onChange={(e) => setGuests(e.target.value)}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Confirm reservation
+          <div className="tab-row">
+            <button
+              className={`tab-btn ${tab === 'menu' ? 'active' : ''}`}
+              onClick={() => setTab('menu')}
+            >
+              Menu
             </button>
-          </form>
-        )}
-
-        {confirmed && (
-          <div className="card" style={{ marginTop: 20, textAlign: 'center' }}>
-            <p style={{ color: 'var(--ink)', fontWeight: 600 }}>
-              {confirmed === 'reservation'
-                ? `You're booked for ${guests} at ${restaurant.name} on ${date} at ${time}.`
-                : `Your pre-order at ${restaurant.name} is placed — walk in and skip the line.`}
-            </p>
+            <button
+              className={`tab-btn ${tab === 'info' ? 'active' : ''}`}
+              onClick={() => setTab('info')}
+            >
+              Details
+            </button>
           </div>
-        )}
+
+          {tab === 'menu' ? (
+            <div style={{ marginTop: 8 }}>
+              {restaurant.menu.map((item) => (
+                <div className="menu-item" key={item.id}>
+                  <span className="name">{item.name}</span>
+                  <span className="price">₹{item.price}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="info-list">
+              <div className="row">
+                <span className="label">Hours</span>
+                <span>{restaurant.hours}</span>
+              </div>
+              <div className="row">
+                <span className="label">Contact</span>
+                <span>{restaurant.contact}</span>
+              </div>
+              <div className="row">
+                <span className="label">Distance</span>
+                <span>{restaurant.distance}</span>
+              </div>
+            </div>
+          )}
+
+          {reserveOpen && (
+            <form className="card" style={{ marginTop: 20 }} onSubmit={handleReserve}>
+              <h3 style={{ fontSize: 17, marginBottom: 14 }}>Reserve a seat</h3>
+              <div className="field">
+                <label>Date</label>
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+              </div>
+              <div className="field">
+                <label>Time</label>
+                <input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
+              </div>
+              <div className="field">
+                <label>Number of people</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="12"
+                  value={guests}
+                  onChange={(e) => setGuests(e.target.value)}
+                />
+              </div>
+              <button type="submit" className="btn btn-primary">
+                Confirm reservation
+              </button>
+            </form>
+          )}
+
+          {confirmed && (
+            <div className="card" style={{ marginTop: 20, textAlign: 'center' }}>
+              <p style={{ color: 'var(--ink)', fontWeight: 600 }}>
+                {confirmed === 'reservation'
+                  ? `You're booked for ${guests} at ${restaurant.name} on ${date} at ${time}.`
+                  : `Your pre-order at ${restaurant.name} is placed — walk in and skip the line.`}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="sticky-cta">

@@ -3,8 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo.jsx'
 import RestaurantCard from '../components/RestaurantCard.jsx'
 import BottomNav from '../components/BottomNav.jsx'
-import { categories, studentOffers, restaurants } from '../data/mockData.js'
+import { categories, restaurants } from '../data/mockData.js'
 import { useApp } from '../context/useApp.js'
+
+const dailySpecials = [
+  { id: 'd1', name: 'Paneer Tikka Bowl', vendor: 'Street Flame', emoji: '🍛', oldPrice: 180, newPrice: 120, off: '33% off' },
+  { id: 'd2', name: 'Cold Brew Combo', vendor: 'Brew Corner', emoji: '☕', oldPrice: 220, newPrice: 149, off: '32% off' },
+  { id: 'd3', name: 'Fruit Chaat Bowl', vendor: "South Tiffin House", emoji: '🍉', oldPrice: 80, newPrice: 60, off: '25% off' },
+]
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -23,6 +29,9 @@ export default function Dashboard() {
     })
   }, [query, activeCategory])
 
+  const featured = restaurants.slice(0, 2)
+  const firstName = (user?.name || 'Guest').split(' ')[0]
+
   return (
     <div className="page">
       <div className="topbar">
@@ -40,67 +49,93 @@ export default function Dashboard() {
           style={{ width: 38, height: 38, fontSize: 15 }}
           onClick={() => navigate('/profile')}
         >
-          {(user?.name || 'G').charAt(0).toUpperCase()}
+          {firstName.charAt(0).toUpperCase()}
         </button>
       </div>
 
       <div className="page-body" style={{ paddingTop: 4 }}>
-        <h1 style={{ fontSize: 26, marginTop: 6 }}>
-          Find your next
-          <br />
-          hidden gem.
-        </h1>
+        <div className="greeting-row">
+          <div>
+            <div className="greeting-hello">Hey {firstName} 👋</div>
+            <div className="greeting-sub">What are you craving today?</div>
+          </div>
+        </div>
 
-        <div className="search-bar">
-          <span>⌕</span>
-          <input
-            type="text"
-            placeholder="Search restaurants, food, cafes..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
+        <div className="search-row">
+          <div className="search-bar">
+            <span>⌕</span>
+            <input
+              type="text"
+              placeholder="Search cafés, street food, bakeries..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+          <button className="filter-btn" aria-label="Filter">⚙</button>
         </div>
 
         <div className="section-title" style={{ marginTop: 24 }}>
           <h2>Categories</h2>
         </div>
-        <div className="category-row">
-          <button
-            className={`category-chip ${!activeCategory ? 'active' : ''}`}
+        <div className="cat-icon-row">
+          <div
+            className={`cat-icon-item ${!activeCategory ? 'active' : ''}`}
             onClick={() => setActiveCategory(null)}
           >
-            <span className="emoji">✦</span>
-            All
-          </button>
+            <div className="cat-icon-circle">✦</div>
+            <div className="cat-icon-label">All</div>
+          </div>
           {categories.map((cat) => (
-            <button
+            <div
               key={cat.id}
-              className={`category-chip ${activeCategory === cat.id ? 'active' : ''}`}
+              className={`cat-icon-item ${activeCategory === cat.id ? 'active' : ''}`}
               onClick={() => setActiveCategory(cat.id)}
             >
-              <span className="emoji">{cat.emoji}</span>
-              {cat.label}
-            </button>
+              <div className="cat-icon-circle">{cat.emoji}</div>
+              <div className="cat-icon-label">{cat.label}</div>
+            </div>
           ))}
         </div>
 
         <div className="section-title">
-          <h2>Student offers</h2>
-          <span className="see-all">See all</span>
+          <h2>Daily specials</h2>
+          <span className="see-all">Ends in 4h</span>
         </div>
-        <div className="offer-scroll">
-          {studentOffers.map((offer) => (
-            <div className="offer-card" key={offer.id}>
+        {dailySpecials.map((s) => (
+          <div className="specials-card" key={s.id}>
+            <div className="specials-left">
+              <div className="specials-emoji">{s.emoji}</div>
               <div>
-                <div className="offer-title">{offer.title}</div>
-                <div className="offer-sub">{offer.subtitle}</div>
+                <div className="specials-name">{s.name}</div>
+                <div className="specials-vendor">{s.vendor}</div>
               </div>
-              <span className="pill-tag" style={{ background: 'rgba(250,250,248,0.15)', color: 'var(--paper)', alignSelf: 'flex-start' }}>
-                Student
-              </span>
             </div>
-          ))}
+            <div className="specials-price">
+              <span className="specials-old">₹{s.oldPrice}</span>{' '}
+              <span className="specials-new">₹{s.newPrice}</span>
+              <div><span className="specials-off">{s.off}</span></div>
+            </div>
+          </div>
+        ))}
+
+        <div className="section-title">
+          <h2>Featured vendors</h2>
         </div>
+        {featured.map((r) => (
+          <div
+            className="featured-row"
+            key={r.id}
+            onClick={() => navigate(`/restaurant/${r.id}`)}
+            style={{ cursor: 'pointer' }}
+          >
+            <img src={r.banner} alt={r.name} />
+            <div>
+              <div className="featured-badge">★ Top Rated</div>
+              <div className="featured-name">{r.name}</div>
+              <div className="featured-meta">{r.rating} · {r.distance}</div>
+            </div>
+          </div>
+        ))}
 
         <div className="section-title">
           <h2>Nearby hidden gems</h2>
