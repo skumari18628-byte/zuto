@@ -1,13 +1,13 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import Splash from './pages/Splash.jsx'
-import Login from './pages/Login.jsx'
-import Register from './pages/Register.jsx'
-import Dashboard from './pages/Dashboard.jsx'
-import CategoryResults from './pages/CategoryResults.jsx'
-import RestaurantDetails from './pages/RestaurantDetails.jsx'
-import Rewards from './pages/Rewards.jsx'
-import Profile from './pages/Profile.jsx'
-import VendorDashboard from './pages/VendorDashboard.jsx'
+import Splash from './Pages/Splash.jsx'
+import Login from './Pages/Login.jsx'
+import Register from './Pages/Register.jsx'
+import Dashboard from './Pages/Dashboard.jsx'
+import CategoryResults from './Pages/CategoryResults.jsx'
+import RestaurantDetails from './Pages/RestaurantDetails.jsx'
+import Rewards from './Pages/Rewards.jsx'
+import Profile from './Pages/Profile.jsx'
+import VendorDashboard from './Pages/VendorDashboard.jsx'
 
 export default function App() {
   return (
