@@ -30,51 +30,62 @@ export default function Profile() {
   return (
     <div className="page">
       <div className="page-body" style={{ paddingTop: 50 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div className="avatar-lg">{user.name.charAt(0).toUpperCase()}</div>
-          <div>
-            <h1 style={{ fontSize: 21 }}>{user.name}</h1>
-            <p style={{ marginTop: 3, fontSize: 13.5 }}>{user.contact}</p>
+        <div className="profile-hero">
+          <div className="profile-hero-top">
+            <div className="avatar-lg">{user.name.charAt(0).toUpperCase()}</div>
+            <div>
+              <div className="profile-hero-name">{user.name}</div>
+              <div className="profile-hero-contact">{user.contact}</div>
+            </div>
           </div>
-        </div>
-
-        <div className="stat-grid">
-          <div className="stat-card">
-            <div className="value">{rewardPoints}</div>
-            <div className="label">Reward points</div>
-          </div>
-          <div className="stat-card">
-            <div className="value">{favRestaurants.length}</div>
-            <div className="label">Favourites</div>
+          <div className="profile-mini-stats">
+            <div className="stat">
+              <div className="num">{favRestaurants.length}</div>
+              <div className="lbl">Favourites</div>
+            </div>
+            <div className="stat">
+              <div className="num">{orderHistory.length}</div>
+              <div className="lbl">Orders</div>
+            </div>
+            <div className="stat">
+              <div className="num">{rewardPoints}</div>
+              <div className="lbl">Points</div>
+            </div>
           </div>
         </div>
 
         <div className="section-title">
           <h2 style={{ fontSize: 19 }}>Favourite restaurants</h2>
+          {favRestaurants.length > 0 && <span className="see-all">See all</span>}
         </div>
         {favRestaurants.length === 0 ? (
           <p style={{ fontSize: 13.5 }}>Tap the heart on a restaurant to save it here.</p>
         ) : (
-          favRestaurants.map((r) => (
-            <div
-              className="profile-row"
-              key={r.id}
-              onClick={() => navigate(`/restaurant/${r.id}`)}
-              style={{ cursor: 'pointer' }}
-            >
-              <span>{r.name}</span>
-              <span className="chevron">→</span>
-            </div>
-          ))
+          <div className="fav-scroll">
+            {favRestaurants.map((r) => (
+              <div
+                className="fav-card"
+                key={r.id}
+                onClick={() => navigate(`/restaurant/${r.id}`)}
+              >
+                <img src={r.banner} alt={r.name} />
+                <div className="fav-info">
+                  <div className="fav-name">{r.name}</div>
+                  <div className="fav-rating">★ {r.rating}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
 
         <div className="section-title">
-          <h2 style={{ fontSize: 19 }}>Order history</h2>
+          <h2 style={{ fontSize: 19 }}>Recent orders</h2>
+          {orderHistory.length > 0 && <span className="see-all">See all</span>}
         </div>
         {orderHistory.length === 0 ? (
           <p style={{ fontSize: 13.5 }}>No orders yet — pre-order from a restaurant page to see it here.</p>
         ) : (
-          orderHistory.map((o) => (
+          orderHistory.slice(0, 4).map((o) => (
             <div className="profile-row" key={o.id}>
               <span>{o.restaurant}</span>
               <span style={{ color: 'var(--stone)', fontSize: 12.5 }}>
@@ -87,26 +98,31 @@ export default function Profile() {
         <div className="section-title">
           <h2 style={{ fontSize: 19 }}>Settings</h2>
         </div>
-        <div className="profile-row" style={{ cursor: 'pointer' }}>
-          <span>Notification preferences</span>
-          <span className="chevron">→</span>
-        </div>
-        <div className="profile-row" style={{ cursor: 'pointer' }}>
-          <span>Payment methods</span>
-          <span className="chevron">→</span>
-        </div>
-        <div className="profile-row" style={{ cursor: 'pointer' }} onClick={() => navigate('/vendor')}>
-          <span>Switch to vendor mode</span>
-          <span className="chevron">→</span>
-        </div>
 
-        <button
-          className="btn btn-ghost"
-          style={{ marginTop: 24 }}
-          onClick={handleLogout}
-        >
-          Log out
-        </button>
+        <div className="list-item">
+          <span className="list-icon">🔔</span>
+          <span className="list-label">Notifications</span>
+          <span className="list-badge">2 new</span>
+        </div>
+        <div className="list-item">
+          <span className="list-icon">💬</span>
+          <span className="list-label">Help &amp; Support</span>
+          <span className="chevron">→</span>
+        </div>
+        <div className="list-item">
+          <span className="list-icon">⭐</span>
+          <span className="list-label">Rate the app</span>
+          <span className="chevron">→</span>
+        </div>
+        <div className="list-item" onClick={() => navigate('/vendor')}>
+          <span className="list-icon">🏪</span>
+          <span className="list-label">Switch to vendor dashboard</span>
+          <span className="chevron">→</span>
+        </div>
+        <div className="list-item danger" onClick={handleLogout}>
+          <span className="list-icon">↪</span>
+          <span className="list-label">Log out</span>
+        </div>
       </div>
       <BottomNav />
     </div>
