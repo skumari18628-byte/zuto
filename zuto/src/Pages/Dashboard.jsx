@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo.jsx'
 import RestaurantCard from '../components/RestaurantCard.jsx'
@@ -16,16 +16,54 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const { user } = useApp()
   const [query, setQuery] = useState('')
+  const [debouncedQuery, setDebouncedQuery] = useState('')
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const searchWrapRef = useRef(null)
+
+  // Debounce the query so filtering doesn't run on every single keystroke
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(query), 200)
+    return () => clearTimeout(t)
+  }, [query])
+
+  // Close suggestions when clicking outside the search area
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (searchWrapRef.current && !searchWrapRef.current.contains(e.target)) {
+        setShowSuggestions(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
 
   const filtered = useMemo(() => {
     return restaurants.filter((r) => {
       return (
-        !query ||
-        r.name.toLowerCase().includes(query.toLowerCase()) ||
-        r.cuisine.toLowerCase().includes(query.toLowerCase())
+        !debouncedQuery ||
+        r.name.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
+        r.cuisine.toLowerCase().includes(debouncedQuery.toLowerCase())
       )
     })
+  }, [debouncedQuery])
+
+  const matchedCategories = useMemo(() => {
+    if (!query) return []
+    return categories.filter((c) => c.label.toLowerCase().includes(query.toLowerCase()))
   }, [query])
+
+  const matchedRestaurants = useMemo(() => {
+    if (!query) return []
+    return restaurants
+      .filter(
+        (r) =>
+          r.name.toLowerCase().includes(query.toLowerCase()) ||
+          r.cuisine.toLowerCase().includes(query.toLowerCase())
+      )
+      .slice(0, 5)
+  }, [query])
+
+  const hasSuggestions = matchedCategories.length > 0 || matchedRestaurants.length > 0
 
   const featured = restaurants.slice(0, 2)
   const firstName = (user?.name || 'Guest').split(' ')[0]
@@ -59,15 +97,71 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="search-row">
-          <div className="search-bar">
-            <span>⌕</span>
-            <input
-              type="text"
-              placeholder="Search cafés, street food, bakeries..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
+        <div className="search-row" ref={searchWrapRef}>
+          <div className="search-wrap" style={{ flex: 1 }}>
+            <div className="search-bar">
+              <span>⌕</span>
+              <input
+                type="text"
+                placeholder="Search cafés, street food, bakeries..."
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value)
+                  setShowSuggestions(true)
+                }}
+                onFocus={() => query && setShowSuggestions(true)}
+              />
+            </div>
+
+            {showSuggestions && query && (
+              <div className="search-suggestions">
+                {!hasSuggestions ? (
+                  <div className="suggestion-empty">No matches for "{query}"</div>
+                ) : (
+                  <>
+                    {matchedCategories.length > 0 && (
+                      <>
+                        <div className="suggestion-group-label">Categories</div>
+                        {matchedCategories.map((c) => (
+                          <div
+                            className="suggestion-item"
+                            key={c.id}
+                            onClick={() => {
+                              setShowSuggestions(false)
+                              navigate(`/category/${c.id}`)
+                            }}
+                          >
+                            <div className="suggestion-icon">{c.emoji}</div>
+                            <div className="suggestion-name">{c.label}</div>
+                          </div>
+                        ))}
+                      </>
+                    )}
+                    {matchedRestaurants.length > 0 && (
+                      <>
+                        <div className="suggestion-group-label">Restaurants</div>
+                        {matchedRestaurants.map((r) => (
+                          <div
+                            className="suggestion-item"
+                            key={r.id}
+                            onClick={() => {
+                              setShowSuggestions(false)
+                              navigate(`/restaurant/${r.id}`)
+                            }}
+                          >
+                            <img src={r.banner} alt={r.name} />
+                            <div>
+                              <div className="suggestion-name">{r.name}</div>
+                              <div className="suggestion-meta">{r.cuisine}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
           </div>
           <button className="filter-btn" aria-label="Filter">⚙</button>
         </div>
